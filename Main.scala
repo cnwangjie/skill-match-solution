@@ -30,8 +30,8 @@ object Main {
     return data.map(item => (p.map(item(_)).mkString("|"), item(r)))
       .groupByKey()
       .values
-      .filter(_.size > 1) // 留下可能有不同的
-      .filter(i => !i.forall(_ == i.head)) // 留下有不同的
+      .filter(_.size > 1)
+      .filter(i => !i.forall(_ == i.head))
       .count == 0
   }
 
@@ -132,6 +132,8 @@ object Main {
         .mkString(",")
       val rs = dep(key)
         .map(_ + 1)
+        .toList
+        .sortWith(_ < _)
         .map("column" + _)
         .mkString(",")
 
