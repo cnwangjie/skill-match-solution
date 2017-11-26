@@ -49,7 +49,7 @@ object Main {
     println("         data loaded")
     println("===================================")
     println("data size: " + dataSize)
-    data = inputFile.map(_.split(","))
+    data = inputFile.map(_.split(",")).cache()
     attrNum = data.first().length
 
     println("===================================")
