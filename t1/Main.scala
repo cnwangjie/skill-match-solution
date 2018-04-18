@@ -38,10 +38,12 @@ object Main {
     println("         initialized")
     println("===================================")
 
-    sc.setLogLevel("WARN")
+    sc.setLogLevel("ERROR")
     val inputFilePath = if (args.length > 0) args(0) else "hdfs:///user/cluster/data/"
     val outputFilePath = if (args.length > 1) args(1) else "hdfs:///user/cluster/t1.ans/"
     val tempFilePath = if (args.length > 2) args(2) else ""
+
+    println("loading D.dat...")
     val d = sc.textFile((inputFilePath + "/D.dat"), 2000)
       .filter(_ != "")
       .map(_.split(" ")
@@ -54,6 +56,7 @@ object Main {
     println("===================================")
     println("size of D.dat: " + dSize)
 
+    println("creating model...")
     val model = new FPGrowth()
       .setMinSupport(0.092)
       .setNumPartitions(2000)
@@ -62,6 +65,8 @@ object Main {
     println("====================================")
     println("stage: model created")
     println("====================================")
+
+    println("calculating freq item sets...")
     val fiss = model.freqItemsets.persist(MEMORY_AND_DISK)
     val fissSize = fiss.count
     println("====================================")
@@ -77,6 +82,7 @@ object Main {
     println("freq model saved at path: " + freq_model_path)
     println("====================================")
 
+    println("generating association rules...")
     val rules = model.generateAssociationRules(0).persist(MEMORY_AND_DISK)
     val rulesSize = rules.count
     println("====================================")
@@ -93,6 +99,7 @@ object Main {
       .map(i => (i.consequent(0), i.antecedent.toSet))
     val handledRulesBC = sc.broadcast(handledRules.collect)
 
+    println("recommanding...")
     val result = u.map(_.toSet)
       .map(findItem(_, handledRulesBC.value))
       .persist(MEMORY_AND_DISK)
@@ -101,7 +108,10 @@ object Main {
     println("====================================")
 
     val recommand_path = outputFilePath + "/recommand_result"
-    result.coalesce(1, false).saveAsTextFile(recommand_path)
+    result.coalesce(100, false).saveAsTextFile(recommand_path)
+    println("====================================")
+    println("recommand result saved at path: " + recommand_path)
+    println("====================================")
 
     println("====================================")
     println("               done")

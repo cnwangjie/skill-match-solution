@@ -181,6 +181,8 @@ object Main {
           }
         }
       }
+
+      executors.shutdownNow
     })
 
     println("===================================")
@@ -215,6 +217,5 @@ object Main {
     println("             done")
     println("===================================")
   }
-
 
 }
