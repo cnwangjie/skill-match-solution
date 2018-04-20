@@ -15,15 +15,15 @@ import java.util.concurrent.Executors
 object Main {
 
   private val conf = new SparkConf().setAppName("AR")
-    .set("spark.blacklist.enabled", "true")
-    .set("spark.blacklist.timeout", "60s")
-    .set("spark.cores.max", "168")
-    .set("spark.driver.cores", "23")
+    // .set("spark.blacklist.enabled", "true")
+    // .set("spark.blacklist.timeout", "60s")
+    // .set("spark.cores.max", "168")
+    // .set("spark.driver.cores", "23")
     .set("spark.driver.maxResultSize", "2G")
-    .set("spark.executor.cores", "23")
-    .set("spark.executor.extraJavaOptions", "-XX:+UseG1GC")
-    .set("spark.network.timeout", "300s")
-    .set("spark.speculation", "true")
+    // .set("spark.executor.cores", "23")
+    // .set("spark.executor.extraJavaOptions", "-XX:+UseG1GC")
+    // .set("spark.network.timeout", "300s")
+    // .set("spark.speculation", "true")
   private val sc = new SparkContext(conf)
   private var data: RDD[Array[String]] = sc.emptyRDD
 

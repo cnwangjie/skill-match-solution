@@ -13,15 +13,15 @@ import org.apache.spark.storage.StorageLevel.MEMORY_AND_DISK
 object Main {
 
   private val conf = new SparkConf().setAppName("AR")
-    .set("spark.blacklist.enabled", "true")
-    .set("spark.blacklist.timeout", "60s")
-    .set("spark.cores.max", "168")
-    .set("spark.driver.cores", "23")
+    // .set("spark.blacklist.enabled", "true")
+    // .set("spark.blacklist.timeout", "60s")
+    // .set("spark.cores.max", "168")
+    // .set("spark.driver.cores", "23")
     .set("spark.driver.maxResultSize", "2G")
-    .set("spark.executor.cores", "23")
-    .set("spark.executor.extraJavaOptions", "-XX:+UseG1GC")
-    .set("spark.network.timeout", "300s")
-    .set("spark.speculation", "true")
+    // .set("spark.executor.cores", "23")
+    // .set("spark.executor.extraJavaOptions", "-XX:+UseG1GC")
+    // .set("spark.network.timeout", "300s")
+    // .set("spark.speculation", "true")
   private val sc = new SparkContext(conf)
 
   def findItem(u: Set[Int], r: Array[Tuple2[Int, Set[Int]]]): Int = {
@@ -76,7 +76,7 @@ object Main {
 
     val freq_model_path = outputFilePath + "/freq_model"
     fiss.sortBy(_.freq)
-      .map(i => i.items.mkString("{", ",", "}") + ": " + i.freq)
+      .map(i => i.items.sorted.mkString(" "))
       .saveAsTextFile(freq_model_path)
     println("====================================")
     println("freq model saved at path: " + freq_model_path)
