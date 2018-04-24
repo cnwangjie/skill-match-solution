@@ -90,7 +90,7 @@ object Main {
     println("====================================")
     println("size of rules: " + rulesSize)
 
-    val u = sc.textFile(inputFilePath + "/U.dat", 5000)
+    val u = sc.textFile(inputFilePath + "/U.dat", 10000)
       .map(_.split(" ").map(_.toInt))
 
     val handledRules = rules
@@ -103,6 +103,7 @@ object Main {
     val result = u.map(_.toSet)
       .map(findItem(_, handledRulesBC.value))
       .persist(MEMORY_AND_DISK)
+    val rc = result.collect
     println("====================================")
     println("    recommand completed")
     println("====================================")
